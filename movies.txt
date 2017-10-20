@@ -1,4 +1,3 @@
-movie_id|title
 19995|Avatar
 285|Pirates of the Caribbean: At World's End
 206647|Spectre

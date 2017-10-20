@@ -15,8 +15,14 @@ $actorsFile = fopen('actors.txt', 'ab');
 $movieActorsFile = fopen('movie-actors.txt', 'ab');
 
 $actorsArray = [];
+$header = true;
 
 foreach ($csv as $row) {
+	if ($header) {
+		$header = false;
+		continue;
+	}
+	
 	$movieId = $row[0];
 	$movieName = $row[1];
 	fwrite($moviesFile, $movieId . '|' . rtrim($movieName) . PHP_EOL);
