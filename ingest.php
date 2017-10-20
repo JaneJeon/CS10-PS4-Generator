@@ -1,4 +1,6 @@
 <?php
+# download csv from https://www.kaggle.com/tmdb/tmdb-movie-metadata/data and unzip it.
+# place the csv in this directory and run this script to begin
 
 # cleanup
 if (is_file('movies.txt')) unlink('movies.txt');
