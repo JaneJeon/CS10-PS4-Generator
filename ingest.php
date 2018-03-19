@@ -2,6 +2,10 @@
 # download csv from https://www.kaggle.com/tmdb/tmdb-movie-metadata/data and unzip it.
 # place the csv in this directory and run this script to begin
 
+# limit the number of actors to track
+const actorsLimit = 8000;
+const moviesLimit = 3000;
+
 # cleanup
 if (is_file('movies.txt')) unlink('movies.txt');
 if (is_file('actors.txt')) unlink('actors.txt');
@@ -15,13 +19,11 @@ $actorsFile = fopen('actors.txt', 'ab');
 $movieActorsFile = fopen('movie-actors.txt', 'ab');
 
 $actorsArray = [];
-$header = true;
+$numMovies = -1;
 
 foreach ($csv as $row) {
-	if ($header) {
-		$header = false;
-		continue;
-	}
+	$numMovies++;
+	if (!$numMovies || $numMovies >= moviesLimit) continue;
 	
 	$movieId = $row[0];
 	$movieName = $row[1];
@@ -34,12 +36,12 @@ foreach ($csv as $row) {
 		$actorId = $actor['id'];
 		$actorName = $actor['name'];
 		
-		if (!in_array($actorId, $actorsArray)) {
+		if (!in_array($actorId, $actorsArray) && count($actorsArray) < actorsLimit) {
 			$actorsArray[] = $actorId;
 			fwrite($actorsFile, $actorId . '|' . rtrim($actorName) . PHP_EOL);
 		}
 		
-		fwrite($movieActorsFile, $movieId . '|' . $actorId . PHP_EOL);
+		if (in_array($actorId, $actorsArray)) fwrite($movieActorsFile, $movieId . '|' . $actorId . PHP_EOL);
 	}
 }
 
